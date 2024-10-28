@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { MdOutlineBookmarkRemove, MdEdit } from "react-icons/md";
 import { FaCheck } from "react-icons/fa";
 import { TodoType } from '../types/Types';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { removeTodoById, updateTodoById } from '../redux/slices/TodoSlice';
 
 interface TodoProps{

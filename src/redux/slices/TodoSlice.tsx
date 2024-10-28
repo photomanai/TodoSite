@@ -1,12 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit'
-import type { Action, PayloadAction } from '@reduxjs/toolkit'
+import type {PayloadAction } from '@reduxjs/toolkit'
 import { TodoInitialState, TodoType } from '../../types/Types'
-import { act } from 'react'
 
-const initialState : TodoInitialState = {
-    todos: [],
-    id:0,
-}
+const getBasketFromStroge = () => {
+    const todos = localStorage.getItem("todos")
+    if (todos){
+        console.log(JSON.parse(todos))
+        return JSON.parse(todos)
+    }
+    return [];
+};
+
+const initialState : TodoInitialState = getBasketFromStroge()
+
+
+const writeFromBasketToStorage = (todos:TodoInitialState) => {
+    localStorage.setItem("todos", JSON.stringify(todos))
+};
 
 export const todoSlice = createSlice({
     name: "todo",
@@ -19,11 +29,13 @@ export const todoSlice = createSlice({
                 id: state.id
             }
             state.todos = [...state.todos, newTodo];
+            writeFromBasketToStorage(state)
         },
         removeTodoById: (state: TodoInitialState , action:PayloadAction<number>)=>{
             state.todos = [...state.todos.filter((todo:TodoType)=>{
                 return todo.id !== action.payload
             })]
+            writeFromBasketToStorage(state)
         },
         updateTodoById: (state: TodoInitialState , action:PayloadAction<TodoType>)=>{
             // const filteredTodos = state.todos.filter((todo:TodoType)=>{
@@ -36,6 +48,7 @@ export const todoSlice = createSlice({
                 return action.payload
             })
             state.todos = [...filteredTodos]
+            writeFromBasketToStorage(state)
         }
     }
 })
